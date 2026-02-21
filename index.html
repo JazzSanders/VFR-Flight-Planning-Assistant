@@ -13,6 +13,62 @@
 
    -->
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>VFR Flight Planning Assistant</title>
+    <link rel="stylesheet" href="index-styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>VFR Flight Planning Assistant</h1>
+            <p class="subtitle">Developer: Jasmine Sanders</p>
+        </header>
 
-   </head>
-   </html>
+        <main>
+            <form id="flight-form">
+                <div class="input-group">
+                    <label for="trueCourse">True Course (0-360°)</label>
+                    <input type="number" id="trueCourse" min="0" max="360" required placeholder="e.g., 090">
+                </div>
+
+                <div class="input-group">
+                    <label for="trueAirspeed">True Airspeed (Knots)</label>
+                    <input type="number" id="trueAirspeed" min="1" required placeholder="e.g., 110">
+                </div>
+
+                <div class="input-group">
+                    <label for="windDirection">Wind Direction (0-360°)</label>
+                    <input type="number" id="windDirection" min="0" max="360" required placeholder="e.g., 180">
+                </div>
+
+                <div class="input-group">
+                    <label for="windSpeed">Wind Speed (Knots)</label>
+                    <input type="number" id="windSpeed" min="0" required placeholder="e.g., 15">
+                </div>
+
+                <button type="submit" class="calculate-btn">CALCULATE</button>
+            </form>
+
+            <div id="results-panel" class="results-panel hidden">
+                <h2>Navigation Results</h2>
+                <div class="result-grid">
+                    <div class="result-box">
+                        <span class="result-label">Wind Correction Angle</span>
+                        <span id="wca-result" class="result-value">--</span>
+                    </div>
+                    <div class="result-box highlight">
+                        <span class="result-label">True Heading</span>
+                        <span id="heading-result" class="result-value">--</span>
+                    </div>
+                    <div class="result-box">
+                        <span class="result-label">Groundspeed</span>
+                        <span id="gs-result" class="result-value">--</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
