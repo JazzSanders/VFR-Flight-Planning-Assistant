@@ -10,142 +10,247 @@
 
    */
 
-
-/* Base Reset and Cockpit Optimization */
+/* --- Base Reset & Cockpit Optimization --- */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    /* Prevents double-tap zoom on tablets in turbulence */
-    touch-action: manipulation; 
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  /* Prevents double-tap zoom on tablets which is frustrating in turbulence */
+  touch-action: manipulation;
 }
 
 body {
-    background-color: #121212; /* Dark background reduces cockpit glare */
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
+  background-color: #121212; /* Dark background reduces screen glare during night flight */
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  line-height: 1.6;
 }
 
 .app-container {
-    width: 100%;
-    max-width: 600px;
-    background-color: #1e1e1e;
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+  width: 100%;
+  max-width: 650px;
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
 }
 
+/* --- Header & Branding --- */
 header {
-    text-align: center;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #333;
-    padding-bottom: 15px;
+  text-align: center;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #333;
+  padding-bottom: 20px;
 }
 
 h1 {
-    font-size: 1.8rem;
-    color: #4CAF50; /* Aviation Green */
-    margin-bottom: 5px;
+  font-size: 1.8rem;
+  color: #4caf50;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .subtitle {
-    color: #888;
-    font-size: 0.9rem;
+  font-size: 0.9rem;
+  color: #888;
+  margin-top: 5px;
+}
+
+/* --- Tabbed Navigation --- */
+.calc-tabs {
+  display: flex;
+  overflow-x: auto; /* Allows scrolling on very small mobile screens */
+  gap: 8px;
+  margin-top: 20px;
+  padding-bottom: 5px;
+  scrollbar-width: none; /* Hides scrollbar on Firefox */
+}
+
+.calc-tabs::-webkit-scrollbar {
+  display: none; /* Hides scrollbar on Chrome/Safari */
+}
+
+.tab-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: 12px 5px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #aaa;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.tab-btn.active {
+  background: #4caf50;
+  color: white;
+  border-color: #4caf50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+/* --- Calculator Sections --- */
+.calc-section {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Form & Input Layout --- */
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
 }
 
 .input-group {
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+/* Full width for single-column inputs */
+.full-width {
+  grid-column: span 2;
 }
 
 label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 1.1rem;
-    color: #b3b3b3;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #b3b3b3;
+  font-weight: bold;
 }
 
-/* Large, high-contrast inputs for easy reading and tapping */
 input[type="number"] {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.5rem;
-    background-color: #2a2a2a;
-    border: 2px solid #444;
-    color: #fff;
-    border-radius: 8px;
-    outline: none;
-    transition: border-color 0.2s;
+  width: 100%;
+  padding: 14px;
+  font-size: 1.2rem;
+  background-color: #2a2a2a;
+  border: 2px solid #444;
+  color: #fff;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
 input[type="number"]:focus {
-    border-color: #4CAF50;
+  border-color: #4caf50;
 }
 
+/* --- Action Buttons --- */
 .calculate-btn {
-    width: 100%;
-    padding: 20px;
-    font-size: 1.5rem;
-    font-weight: bold;
-    background-color: #ff9800; /* Aviation Warning Orange */
-    color: #121212;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
-    box-shadow: 0 4px 6px rgba(255, 152, 0, 0.3);
+  width: 100%;
+  padding: 18px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  background-color: #ff9800;
+  color: #121212;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .calculate-btn:active {
-    transform: scale(0.98);
+  transform: scale(0.98);
 }
 
-/* Results Formatting */
+.calculate-btn.secondary {
+  background-color: #444;
+  color: #fff;
+  font-size: 1rem;
+  padding: 12px;
+}
+
+/* --- Results Panel --- */
 .results-panel {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 2px solid #333;
-}
-
-.results-panel.hidden {
-    display: none;
-}
-
-.results-panel h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #4CAF50;
+  margin-top: 25px;
+  padding: 20px;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 10px;
 }
 
 .result-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
 
 .result-box {
-    background-color: #2a2a2a;
-    padding: 20px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background-color: #2a2a2a;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .result-box.highlight {
-    border: 2px solid #4CAF50;
-    background-color: #1a2e1a;
+  border: 2px solid #4caf50;
+  background-color: #1a2e1a;
 }
 
 .result-label {
-    font-size: 1.2rem;
-    color: #b3b3b3;
+  font-size: 1rem;
+  color: #888;
+  text-transform: uppercase;
 }
 
 .result-value {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4caf50;
+}
+
+/* --- Visual Aids (Placeholders for Images) --- */
+.visual-aid {
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #333;
+  opacity: 0.8;
+}
+
+.visual-aid img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: brightness(0.8) contrast(1.2);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+  .input-grid {
+    grid-template-columns: 1fr; /* Stack inputs on small phones */
+  }
+  .full-width {
+    grid-column: span 1;
+  }
+  h1 {
+    font-size: 1.4rem;
+  }
 }
