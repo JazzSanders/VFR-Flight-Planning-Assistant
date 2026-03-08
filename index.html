@@ -6,6 +6,7 @@
       VFR Flight Planning Assistant: Web Application for CSC272
       Author: Jasmine Sanders
       Date: 02/21/2025
+      Updated: 03/08/2026
 
       Filename: index.html
       Required Files: 
@@ -102,7 +103,7 @@
                 <span>WCA</span><span id="res-wca">--</span>
               </div>
               <div class="result-box highlight">
-                <span>Heading</span><span id="res-th">--</span>
+                <span>True Heading (TH)</span><span id="res-th">--</span>
               </div>
               <div class="result-box highlight">
                 <span>Groundspeed</span><span id="res-gs">--</span>
@@ -115,6 +116,38 @@
         </section>
 
         <section id="performance" class="calc-section hidden">
+          <h3>Altitudes</h3>
+          <div class="input-grid">
+            <div class="input-group">
+              <label>Elevation (ft)</label>
+              <input type="number" id="field_el" placeholder="1500" />
+            </div>
+            <div class="input-group">
+              <label>Altimeter (inHg)</label>
+              <input type="number" id="altimeter" step="0.01" placeholder="29.92" />
+            </div>
+            <div class="input-group">
+              <label>Temp (°C)</label>
+              <input type="number" id="oat_alt" placeholder="15" />
+            </div>
+          </div>
+          <button type="button" class="calculate-btn" onclick="calcAltitudes()">
+            CALC ALTITUDES
+          </button>
+
+          <div id="alt-results" class="results-panel hidden">
+            <div class="result-grid">
+              <div class="result-box highlight">
+                <span>Pressure Alt</span><span id="res-press-alt">--</span>
+              </div>
+              <div class="result-box highlight">
+                <span>Density Alt</span><span id="res-dens-alt">--</span>
+              </div>
+            </div>
+          </div>
+
+          <hr style="margin: 20px 0; border: 1px solid #333" />
+
           <h3>Airspeed Conversions</h3>
           <div class="input-grid">
             <div class="input-group">

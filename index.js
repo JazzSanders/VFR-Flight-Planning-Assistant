@@ -1,10 +1,12 @@
 //Responsive Design for VFR Flight Planning Assistant: Web Application for CSC272
 //Author: Jasmine Sanders
 //Date: 02/21/2025
+//Updated: 03/08/2026
 
 //Filename: index.js
 //Required Files:
 //Description: Responsive Design for VFR Flight Planning Assistant Web Application
+
 
 // --- UI & NAVIGATION LOGIC ---
 
@@ -35,6 +37,10 @@ const normalizeHeading = (deg) => {
   return normalized === 0 ? 360 : Math.round(normalized);
 };
 
+// Magnus-Tetens Constants
+const MAG_A = 17.27;
+const MAG_B = 237.7;
+
 // --- CALCULATOR FUNCTIONS ---
 
 function calcWindTriangle() {
@@ -59,12 +65,37 @@ function calcWindTriangle() {
   const gs = tas * Math.cos(wcaRad) - headwind;
   const th = normalizeHeading(tc + wcaDeg);
 
+  // Update Wind Triangle UI
   document.getElementById("res-wca").innerText =
     Math.abs(Math.round(wcaDeg)) + "° " + (wcaDeg < 0 ? "L" : "R");
   document.getElementById("res-th").innerText =
     th.toString().padStart(3, "0") + "°";
   document.getElementById("res-gs").innerText = Math.round(gs) + " kts";
   document.getElementById("wind-results").classList.remove("hidden");
+
+  // AUTO-POPULATE: Send Groundspeed to Performance Tab
+  document.getElementById("gs_perf").value = Math.round(gs);
+}
+
+function calcAltitudes() {
+  const el = parseFloat(document.getElementById("field_el").value);
+  const altim = parseFloat(document.getElementById("altimeter").value);
+  const oat = parseFloat(document.getElementById("oat_alt").value);
+
+  if (isNaN(el) || isNaN(altim) || isNaN(oat)) return;
+
+  // Pressure Altitude = Elevation + (29.92 - Altimeter) * 1000
+  const pressAlt = el + (29.92 - altim) * 1000;
+  
+  // Standard Temp at Altitude = 15 - (2 * (PA/1000))
+  const stdTemp = 15 - (2 * (pressAlt / 1000));
+  
+  // Density Altitude = Pressure Alt + (120 * (OAT - StdTemp))
+  const densAlt = pressAlt + (120 * (oat - stdTemp));
+
+  document.getElementById("res-press-alt").innerText = Math.round(pressAlt) + " ft";
+  document.getElementById("res-dens-alt").innerText = Math.round(densAlt) + " ft";
+  document.getElementById("alt-results").classList.remove("hidden");
 }
 
 function findActualWind() {
@@ -128,20 +159,31 @@ function calcIAS() {
   document.getElementById("perf-results").classList.remove("hidden");
 }
 
+// Magnus-Tetens Equation for Dewpoint
 function calcDewpoint() {
   const T = parseFloat(document.getElementById("w-temp").value);
-  const RH = parseFloat(document.getElementById("w-variable").value);
-  const dp = T - (100 - RH) / 5;
+  const RH = parseFloat(document.getElementById("w-variable").value) / 100;
+
+  if (isNaN(T) || isNaN(RH)) return;
+
+  const gamma = ((MAG_A * T) / (MAG_B + T)) + Math.log(RH);
+  const dp = (MAG_B * gamma) / (MAG_A - gamma);
 
   document.getElementById("res-weather-val").innerText =
     dp.toFixed(1) + " °C (Dewpoint)";
   document.getElementById("weather-results").classList.remove("hidden");
 }
 
+// Magnus-Tetens Equation for Relative Humidity
 function calcHumidity() {
   const T = parseFloat(document.getElementById("w-temp").value);
   const DP = parseFloat(document.getElementById("w-variable").value);
-  const rh = 100 - 5 * (T - DP);
+
+  if (isNaN(T) || isNaN(DP)) return;
+
+  const gammaT = (MAG_A * T) / (MAG_B + T);
+  const gammaDP = (MAG_A * DP) / (MAG_B + DP);
+  const rh = Math.exp(gammaDP - gammaT) * 100;
 
   document.getElementById("res-weather-val").innerText =
     Math.round(rh) + " % (Rel. Humidity)";
